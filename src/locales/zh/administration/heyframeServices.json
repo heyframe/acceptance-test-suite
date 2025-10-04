@@ -1,0 +1,23 @@
+{
+    "headings": {
+        "futureProofStore": "Zukunftssicher mit HeyFrame Services"
+    },
+    "buttons": {
+        "activateServices": "Services aktivieren",
+        "grantPermissions": "Berechtigungen erteilen",
+        "deactivate": "Deaktivieren",
+        "exploreNow": "Jetzt erkunden"
+    },
+    "modals": {
+        "deactivateServices": "HeyFrame Services deaktivieren"
+    },
+    "messages": {
+        "accessDenied": "Zugriff verweigert"
+    },
+    "links": {
+        "heyframeServices": "HeyFrame Services"
+    },
+    "dashboard": {
+        "heyframeServicesIntroduction": "Introducing HeyFrame Services"
+    }
+}
