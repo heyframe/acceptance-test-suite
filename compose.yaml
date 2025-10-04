@@ -3,24 +3,24 @@ x-env: &env
   APP_DEBUG: 1
   PROJECT_ROOT: /var/www/html
   MYSQL_ROOT_PASSWORD: app
-  MYSQL_DATABASE: shopware
+  MYSQL_DATABASE: heyframe
   ADMINER_DEFAULT_SERVER: database
-  SHOPWARE_HTTP_CACHE_ENABLED: 0
-  DATABASE_URL: mysql://root:app@database:3306/shopware
-  APP_SECRET: 0000shopwareAAAA0000shopwareAAAA
+  HEYFRAME_HTTP_CACHE_ENABLED: 0
+  DATABASE_URL: mysql://root:app@database:3306/heyframe
+  APP_SECRET: 0000heyframeAAAA0000heyframeAAAA
   APP_URL: http://localhost:${PORT:-8011}
-  SALES_CHANNEL_URL: http://localhost:${PORT:-8011}
+  CHANNEL_URL: http://localhost:${PORT:-8011}
   MAILER_DSN: smtp://mailpit:1025
   MAILPIT_BASE_URL: http://localhost:8013
   SERVICES_ENABLED: 1
   # TEST_WEB_INSTALLER: 1
-  # SHOPWARE_SKIP_WEBINSTALLER: 0
-  SHOPWARE_DISABLE_UPDATE_CHECK: '1'
+  # HEYFRAME_SKIP_WEBINSTALLER: 0
+  HEYFRAME_DISABLE_UPDATE_CHECK: '1'
   # SW_RECOVERY_NEXT_VERSION: 6.6.9999999.9999999
   # SW_RECOVERY_NEXT_BRANCH: dev-trunk
   # SW_RECOVERY_REPOSITORY: '{"type": "path", "url": "custom/packages/*", "options": { "symlink": true } }'
-  INSTALL_LOCALE: en-US
-  INSTALL_CURRENCY: USD
+  INSTALL_LOCALE: zh-CN
+  INSTALL_CURRENCY: CNY
   PHP_OPCACHE_VALIDATE_TIMESTAMPS: 1
 
 x-service: &service
@@ -29,7 +29,7 @@ x-service: &service
   networks:
     - local
 
-x-shopware-volumes: &shopware-volumes
+x-heyframe-volumes: &heyframe-volumes
   volumes:
     - jwt:/var/www/html/config/jwt
     - media:/var/www/html/public/media
@@ -73,31 +73,31 @@ services:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:8025"]
 
   init-volumes:
-    <<: [ *shopware-volumes ]
+    <<: [ *heyframe-volumes ]
     image: alpine:latest
     entrypoint: ["chown"]
     command: ["-R", "82:82", "/var/www/html"]
     user: root
 
   init:
-    <<: [ *service, *shopware-volumes ]
-    image: ghcr.io/shopware/acceptance-test-suite/test-image:${SHOPWARE_VERSION:-trunk}
+    <<: [ *service, *heyframe-volumes ]
+    image: ghcr.io/heyframe/acceptance-test-suite/test-image:${HEYFRAME_VERSION:-trunk}
     build:
       context: .
       dockerfile: test-image.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION:-8.4}
-        - SHOPWARE_VERSION=${SHOPWARE_VERSION:-trunk}
-        - SHOPWARE_BUILD_SOURCE=${SHOPWARE_BUILD_SOURCE:-branch}
+        - HEYFRAME_VERSION=${HEYFRAME_VERSION:-trunk}
+        - HEYFRAME_BUILD_SOURCE=${HEYFRAME_BUILD_SOURCE:-branch}
     depends_on:
       init-volumes:
         condition: service_completed_successfully
       database:
         condition: service_healthy
-    entrypoint: ['vendor/bin/shopware-deployment-helper']
+    entrypoint: ['vendor/bin/heyframe-deployment-helper']
     command: ['run']
 
-  shopware:
+  heyframe:
     extends:
       service: init
     depends_on:
