@@ -1,4 +1,4 @@
-name: Build Shopware Image
+name: Build HeyFrame Image
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   versions:
-    name: Determine Shopware versions to build
+    name: Determine HeyFrame versions to build
     runs-on: ubuntu-24.04
     outputs:
       first-version: ${{ steps.versions.outputs.first-version }} # current major, initial version; so for major = 6.7 -> 6.7.0.0
@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Generate versions
         id: versions
-        uses: shopware/github-actions/versions@main
+        uses: heyframe/github-actions/versions@main
 
   build-test-image:
     runs-on: ubuntu-24.04

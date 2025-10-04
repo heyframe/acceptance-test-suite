@@ -5,7 +5,7 @@ on:
 name: test
 jobs:
   versions:
-    name: Determine Shopware versions to test
+    name: Determine HeyFrame versions to test
     runs-on: ubuntu-24.04
     outputs:
       first-version: ${{ steps.versions.outputs.first-version }}
@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Generate versions
         id: versions
-        uses: shopware/github-actions/versions@main
+        uses: heyframe/github-actions/versions@main
 
   eslint:
     runs-on: ubuntu-latest
@@ -41,7 +41,7 @@ jobs:
       - run: npx pkg-pr-new publish
 
   test:
-    name: test shopware ${{ matrix.SHOPWARE_VERSION_ID }}
+    name: test heyframe ${{ matrix.SHOPWARE_VERSION_ID }}
     timeout-minutes: 15
     runs-on: ubuntu-latest
     needs: [ versions ]
@@ -76,7 +76,7 @@ jobs:
     - name: Login into Github Container Registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-    - name: Start Shopware ${{ matrix.SHOPWARE_VERSION }}
+    - name: Start HeyFrame ${{ matrix.SHOPWARE_VERSION }}
       run: docker compose up --pull=always --quiet-pull --wait
 
     - uses: actions/setup-node@v4
@@ -89,7 +89,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    - name: Run Playwright tests against Shopware ${{ matrix.SHOPWARE_VERSION }}
+    - name: Run Playwright tests against HeyFrame ${{ matrix.SHOPWARE_VERSION }}
       env:
         APP_URL: http://localhost:${{ matrix.PORT }}
       run: npx playwright test --repeat-each 4
